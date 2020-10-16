@@ -1,0 +1,32 @@
+name: budget-cli
+version: 0.1.0.0
+#synopsis:
+#description:
+homepage: https://github.com/githubuser/budget-cli#readme
+license: BSD3
+author: Author name here
+maintainer: example@example.com
+copyright: 2020 Author name here
+category: Web
+extra-source-files:
+  - README.md
+
+dependencies:
+  - base >= 4.7 && < 5
+  - optparse-applicative
+  - persistent
+  - persistent-sqlite
+  - persistent-template
+  - text
+  - time
+  - transformers
+  - mtl
+  - unliftio
+  - unliftio-core
+  - resource-pool
+  - monad-logger
+
+executables:
+  budget-cli:
+    source-dirs: src
+    main: Main.hs
