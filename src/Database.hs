@@ -1,25 +1,32 @@
-{-# LANGUAGE QuasiQuotes #-}
-{-# LANGUAGE TemplateHaskell #-}
-{-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE GADTs #-}
 {-# LANGUAGE DerivingStrategies #-}
+{-# LANGUAGE GADTs #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
-{-# LANGUAGE StandaloneDeriving #-}
-{-# LANGUAGE UndecidableInstances #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE QuasiQuotes #-}
+{-# LANGUAGE StandaloneDeriving #-}
+{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE UndecidableInstances #-}
+
 module Database where
 
-import           Database.Persist
-import           Database.Persist.TH
-import           Data.Text
-import           Data.Time.Calendar
-import           Database.Persist.Class
-import           Database.Persist.Sql
-import           Types
+import Data.Text (Text)
+import Data.Time.Calendar (Day)
+import Database.Persist ()
+import Database.Persist.Sql (BackendKey (SqlBackendKey))
+import Database.Persist.TH
+  ( mkMigrate,
+    mkPersist,
+    persistLowerCase,
+    share,
+    sqlSettings,
+  )
+import DatabaseTypes (Frequency, ItemStatus)
 
-
-share [ mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
+share
+  [mkPersist sqlSettings, mkMigrate "migrateAll"]
+  [persistLowerCase|
   BudgetDefinition
     description Text
     startDate Day
