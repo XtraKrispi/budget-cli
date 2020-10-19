@@ -9,6 +9,7 @@ import Database (BudgetDefinition)
 import Database.Persist (Key, PersistField (..), PersistValue (PersistText), SqlType (SqlString))
 import Database.Persist.Class ()
 import Database.Persist.Sql (PersistFieldSql (..), SqlBackend)
+import DatabaseTypes (Frequency)
 
 data Config = Config
   { _configDatabaseName :: Text,
@@ -21,3 +22,9 @@ data BudgetItem = BudgetItem
     budgetItemDate :: !Day,
     budgetItemAmount :: !Double
   }
+
+data CliCommand
+  = Init
+  | ListDefinitions
+  | ListUpcoming Day (Maybe Day)
+  | AddBudgetDefinition Text Double Frequency Day
