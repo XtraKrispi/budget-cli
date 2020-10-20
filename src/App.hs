@@ -80,6 +80,7 @@ run ::
   (CanInitialize m, CanQueryData m, CanOutput m, CanAddBudgetDefinition m) =>
   CliCommand ->
   m ()
+run Interactive = pure ()
 run Init = C.init >> C.output "Database initialization/migration completed"
 run ListDefinitions = do
   defs <- C.getBudgetDefinitions

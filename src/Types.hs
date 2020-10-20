@@ -6,9 +6,9 @@ import Data.Pool (Pool)
 import Data.Text (Text)
 import Data.Time.Calendar (Day)
 import Database (BudgetDefinition)
-import Database.Persist (Key, PersistField (..), PersistValue (PersistText), SqlType (SqlString))
+import Database.Persist (Key)
 import Database.Persist.Class ()
-import Database.Persist.Sql (PersistFieldSql (..), SqlBackend)
+import Database.Persist.Sql (SqlBackend)
 import DatabaseTypes (Frequency)
 
 data Config = Config
@@ -28,3 +28,4 @@ data CliCommand
   | ListDefinitions
   | ListUpcoming Day (Maybe Day)
   | AddBudgetDefinition Text Double Frequency Day
+  | Interactive

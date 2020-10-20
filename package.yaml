@@ -25,6 +25,13 @@ dependencies:
   - unliftio-core
   - resource-pool
   - monad-logger
+  - brick
+  - vty
+
+ghc-options:
+  - -Wall
+  - -Werror
+  - -threaded
 
 executables:
   budget-cli:
