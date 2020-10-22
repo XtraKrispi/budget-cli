@@ -6,7 +6,6 @@
 module Main where
 
 import App (App (unApp), run)
-import Brick (App (..), Widget, attrMap, continue, defaultMain)
 import Control.Exception (SomeException, catch)
 import Control.Monad.Logger (runStdoutLoggingT)
 import Control.Monad.Trans.Reader (ReaderT (runReaderT))
@@ -20,7 +19,6 @@ import DatabaseTypes
     monthlyText,
     oneTimeText,
   )
-import Graphics.Vty (defAttr)
 import Options.Applicative
   ( Parser,
     ReadM,
@@ -43,6 +41,7 @@ import Options.Applicative
     (<**>),
     (<|>),
   )
+import Tui (runTuiApp)
 import Types (CliCommand (..), Config (..))
 
 cliParser :: Parser CliCommand
@@ -127,36 +126,6 @@ addParser =
 databaseName :: Text
 databaseName = "budget.sqlite3"
 
-data InteractiveName = InteractiveName
-  deriving (Eq, Ord)
-
-interactiveMain :: IO ()
-interactiveMain = do
-  _ <- defaultMain App {..} ()
-  pure ()
-  where
-    appDraw :: () -> [Widget InteractiveName]
-    appDraw _ = []
-    appChooseCursor _ _ = Nothing
-    appHandleEvent s _ = continue s
-    appStartEvent _ = pure ()
-    appAttrMap _ = attrMap defAttr []
-
---     App
--- appDraw :: s -> [Widget n]
--- This function turns your application state into a list of widget layers. The layers are listed topmost first.
-
--- appChooseCursor :: s -> [CursorLocation n] -> Maybe (CursorLocation n)
--- This function chooses which of the zero or more cursor locations reported by the rendering process should be selected as the one to use to place the cursor. If this returns Nothing, no cursor is placed. The rationale here is that many widgets may request a cursor placement but your application state is what you probably want to use to decide which one wins.
-
--- appHandleEvent :: s -> BrickEvent n e -> EventM n (Next s)
--- This function takes the current application state and an event and returns an action to be taken and a corresponding transformed application state. Possible options are continue, suspendAndResume, and halt.
-
--- appStartEvent :: s -> EventM n s
--- This function gets called once just prior to the first drawing of your application. Here is where you can make initial scrolling requests, for example.
-
--- appAttrMap :: s -> AttrMap
-
 main :: IO ()
 main = do
   catch process (\(e :: SomeException) -> putStrLn $ "An error occurred: " <> show e)
@@ -172,5 +141,5 @@ main = do
       cmd <- execParser opts
       config <- Config databaseName <$> runStdoutLoggingT (createSqlitePool databaseName 10)
       case cmd of
-        Interactive -> interactiveMain
+        Interactive -> runTuiApp
         _ -> runReaderT (unApp (run cmd)) config
